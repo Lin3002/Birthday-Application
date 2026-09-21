@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spooky-Chic Birthday | Main Protocol</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            syne: ["Syne", "sans-serif"],
+            code: ["Fira Code", "monospace"]
+          },
+          colors: {
+            void: "#050507",
+            purple: "#8b5cf6",
+            violet: "#c084fc",
+            neon: "#b6ff00"
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --bg: #050507;
+      --purple: #8b5cf6;
+      --violet: #c084fc;
+      --neon: #b6ff00;
+      --white: #f5f5f5;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.18), transparent 30%),
+        radial-gradient(circle at 85% 75%, rgba(192, 132, 252, 0.06), transparent 25%),
+        #050507;
+      color: var(--white);
+      font-family: "Syne", sans-serif;
+    }
+
+    .cyber-grid {
+      position: fixed;
+      inset: 0;
+      z-index: -10;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image:
+        linear-gradient(rgba(139, 92, 246, 0.14) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 92, 246, 0.14) 1px, transparent 1px);
+      background-size: 70px 70px;
+      mask-image: linear-gradient(to bottom, black, transparent 95%);
+    }
+
+    .cyber-glow {
+      position: fixed;
+      width: 440px;
+      height: 440px;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(95px);
+      opacity: 0.22;
+      z-index: -8;
+      background: var(--purple);
+      animation: glowMove 14s ease-in-out infinite alternate;
+    }
+
+    .glow-one { top: -140px; left: -120px; }
+    .glow-two { right: -160px; bottom: -140px; background: #6b21a8; animation-delay: -5s; }
+
+    @keyframes glowMove {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(90px, 60px, 0) scale(1.15); }
+      100% { transform: translate3d(-40px, 120px, 0) scale(0.92); }
+    }
+
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0.035;
+      background: repeating-linear-gradient(to bottom, transparent 0, transparent 3px, rgba(255,255,255,0.2) 4px);
+    }
+
+    /* SPIDER SYSTEM (CERO VERDE - MÁS REALISTAS Y LENTAS) */
+    #spider-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .walking-spider {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      transform-origin: center;
+      will-change: transform;
+      filter: drop-shadow(0 0 6px rgba(139,92,246,0.3));
+    }
+
+    .spider-body {
+      position: absolute;
+      width: 14px;
+      height: 18px;
+      left: 50%;
+      top: 55%;
+      transform: translate(-50%, -50%);
+      background: #09090b;
+      border: 1px solid rgba(168,85,247,0.6);
+      border-radius: 50% 50% 60% 60%;
+      box-shadow: inset -2px -2px 4px #000;
+    }
+
+    .spider-head {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      left: 50%;
+      top: 7px;
+      transform: translateX(-50%);
+      background: #050507;
+      border: 1px solid rgba(192,132,252,0.4);
+      border-radius: 50%;
+    }
+
+    .spider-head::before, .spider-head::after {
+      content: "";
+      position: absolute;
+      width: 1.5px;
+      height: 1.5px;
+      top: 2.5px;
+      border-radius: 50%;
+      background: #e9d5ff;
+      box-shadow: 0 0 3px #c084fc;
+    }
+    .spider-head::before { left: 2px; }
+    .spider-head::after { right: 2px; }
+
+    .spider-leg {
+      position: absolute;
+      width: 18px;
+      height: 1.5px;
+      left: 50%;
+      top: 50%;
+      border-radius: 100%;
+      background: linear-gradient(90deg, #111, #8b5cf6);
+      transform-origin: 0 50%;
+    }
+
+    .leg-1 { transform: translateY(-6px) rotate(140deg); }
+    .leg-2 { transform: translateY(-3px) rotate(162deg); }
+    .leg-3 { transform: translateY(2px) rotate(198deg); }
+    .leg-4 { transform: translateY(5px) rotate(220deg); }
+    .leg-5 { transform: translateX(-18px) translateY(-6px) rotate(40deg); }
+    .leg-6 { transform: translateX(-18px) translateY(-3px) rotate(18deg); }
+    .leg-7 { transform: translateX(-18px) translateY(2px) rotate(-18deg); }
+    .leg-8 { transform: translateX(-18px) translateY(5px) rotate(-40deg); }
+
+    .walking-spider.crawling .leg-1,
+    .walking-spider.crawling .leg-4,
+    .walking-spider.crawling .leg-6,
+    .walking-spider.crawling .leg-7 {
+      animation: legMove 0.8s infinite alternate ease-in-out;
+    }
+
+    .walking-spider.crawling .leg-2,
+    .walking-spider.crawling .leg-3,
+    .walking-spider.crawling .leg-5,
+    .walking-spider.crawling .leg-8 {
+      animation: legMoveReverse 0.8s infinite alternate ease-in-out;
+    }
+
+    @keyframes legMove { from { margin-top: -1.5px; } to { margin-top: 2.5px; } }
+    @keyframes legMoveReverse { from { margin-top: 2.5px; } to { margin-top: -1.5px; } }
+
+    .spider-web {
+      position: absolute;
+      height: 1px;
+      transform-origin: left center;
+      background: linear-gradient(90deg, rgba(230,230,230,0.35), rgba(168,85,247,0.2), transparent);
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .corner-web {
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+    .corner-web::before, .corner-web::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(200,200,200,0.2);
+      border-radius: 50%;
+    }
+    .corner-web::before { transform: rotate(25deg) scaleY(0.45); }
+    .corner-web::after { transform: rotate(-25deg) scaleY(0.45); }
+
+    .web-top-left { top: -115px; left: -115px; }
+    .web-top-right { top: -115px; right: -115px; }
+    .web-bottom-left { bottom: -115px; left: -115px; }
+    .web-bottom-right { bottom: -115px; right: -115px; }
+
+    /* HOLOGRAPHIC CARDS & ORB */
+    .holo-card {
+      position: relative;
+      transform-style: preserve-3d;
+      will-change: transform;
+      background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(139,92,246,0.04));
+      border: 1px solid rgba(192,132,252,0.22);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 20px 80px rgba(0,0,0,0.45), inset 0 0 40px rgba(139,92,246,0.03);
+    }
+
+    .magic-orb {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      transform-style: preserve-3d;
+      background:
+        radial-gradient(circle at 35% 30%, rgba(255,255,255,0.25), transparent 8%),
+        radial-gradient(circle at 40% 35%, rgba(192,132,252,0.4), transparent 28%),
+        radial-gradient(circle, #24133f 0%, #120a20 50%, #050507 100%);
+      border: 1px solid rgba(192,132,252,0.5);
+      box-shadow: 0 0 25px rgba(139,92,246,0.4), inset -15px -15px 40px rgba(0,0,0,0.8);
+      animation: orbPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes orbPulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(139,92,246,0.4), 0 0 50px rgba(139,92,246,0.15); }
+      50% { box-shadow: 0 0 35px rgba(139,92,246,0.7), 0 0 80px rgba(139,92,246,0.25); }
+    }
+
+    .count-number {
+      font-family: "Fira Code", monospace;
+      color: #c084fc;
+      text-shadow: 0 0 10px rgba(192,132,252,0.5);
+    }
+
+    .count-label {
+      font-family: "Fira Code", monospace;
+      letter-spacing: 0.15em;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .neon-button {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(168,85,247,0.6);
+      color: #e9d5ff;
+      background: rgba(139,92,246,0.06);
+      transition: all 0.3s ease;
+    }
+    .neon-button:hover {
+      color: #050507;
+      background: #c084fc;
+      box-shadow: 0 0 25px rgba(192,132,252,0.5);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="cyber-grid"></div>
+  <div class="cyber-glow glow-one"></div>
+  <div class="cyber-glow glow-two"></div>
+  <div class="scanlines"></div>
+
+  <div id="spider-layer" aria-hidden="true">
+    <div class="corner-web web-top-left"></div>
+    <div class="corner-web web-top-right"></div>
+    <div class="corner-web web-bottom-left"></div>
+    <div class="corner-web web-bottom-right"></div>
+  </div>
+
+  <main class="relative min-h-screen overflow-hidden flex flex-col justify-between p-6 sm:p-12">
+
+    <!-- HERO & COUNTDOWN SECTION -->
+    <section class="relative z-10 mx-auto max-w-5xl w-full pt-16 pb-12">
+      <div class="max-w-3xl">
+        <p class="mb-4 font-code text-xs uppercase tracking-[0.35em] text-purple-400">SYSTEM EVENT // 001</p>
+        <h1 class="text-5xl sm:text-7xl lg:text-8xl font-extrabold tracking-tight uppercase leading-none">
+          SPOOKY <br><span class="text-purple-400">BIRTHDAY</span>
+        </h1>
+        <p class="mt-6 font-code text-sm sm:text-base text-white/50 max-w-xl leading-relaxed">
+          A dark little celebration engineered somewhere between midnight magic, neon lights and controlled chaos.
+        </p>
+        
+        <!-- BOTONES -->
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="#countdown" class="neon-button rounded-full px-7 py-3 font-code text-xs font-semibold uppercase tracking-[0.2em] inline-flex items-center justify-center">
+            Enter the night
+          </a>
+          <a href="musica.html" class="rounded-full border border-white/10 bg-white/[0.03] px-7 py-3 font-code text-xs uppercase tracking-[0.2em] text-white/60 transition hover:border-purple-400/50 hover:text-white inline-flex items-center justify-center">
+            Tocadiscos & Playlist
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL COUNTDOWN CON LA ESFERA MÁGICA -->
+    <section id="countdown" class="relative z-10 mx-auto max-w-5xl w-full pb-16">
+      <div class="holo-card rounded-[2rem] p-6 sm:p-8">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+          
+          <!-- Orbe Mágico Central del Countdown -->
+          <div class="flex items-center gap-6">
+            <div id="magicOrb" class="magic-orb flex items-center justify-center flex-shrink-0">
+              <div class="text-center">
+                <div class="font-code text-[9px] uppercase tracking-[0.3em] text-white/40">TARGET</div>
+                <div id="orbDays" class="mt-1 font-code text-2xl font-bold text-purple-200">00d</div>
+              </div>
+            </div>
+            <div>
+              <p class="font-code text-xs uppercase tracking-[0.3em] text-purple-400">// FINAL_COUNTDOWN</p>
+              <h3 class="text-xl sm:text-2xl font-bold mt-1 text-white">Until midnight protocol</h3>
+            </div>
+          </div>
+
+          <!-- Bloques de tiempo -->
+          <div class="grid grid-cols-4 gap-3 sm:gap-4 w-full md:w-auto">
+            <div class="rounded-xl border border-white/10 bg-black/40 p-3 sm:p-4 text-center min-w-[70px]">
+              <div id="days" class="count-number text-2xl sm:text-3xl font-bold">00</div>
+              <div class="count-label mt-1 text-[8px] uppercase">Days</div>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-black/40 p-3 sm:p-4 text-center min-w-[70px]">
+              <div id="hours" class="count-number text-2xl sm:text-3xl font-bold">00</div>
+              <div class="count-label mt-1 text-[8px] uppercase">Hours</div>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-black/40 p-3 sm:p-4 text-center min-w-[70px]">
+              <div id="minutes" class="count-number text-2xl sm:text-3xl font-bold">00</div>
+              <div class="count-label mt-1 text-[8px] uppercase">Minutes</div>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-black/40 p-3 sm:p-4 text-center min-w-[70px]">
+              <div id="seconds" class="count-number text-2xl sm:text-3xl font-bold">00</div>
+              <div class="count-label mt-1 text-[8px] uppercase">Seconds</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BRUJITAS EN LA ESQUINA SUPERIOR DERECHA (FUSIONADAS) -->
+  <div class="fixed top-0 right-0 z-50 pointer-events-none hidden md:block select-none overflow-hidden">
+    <img 
+      src="brujitas.png" 
+      alt="Brujitas Spooky" 
+      class="w-72 md:w-96 h-auto pointer-events-auto"
+      style="
+        mix-blend-mode: screen; 
+        -webkit-mask-image: radial-gradient(circle at top right, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 85%);
+        mask-image: radial-gradient(circle at top right, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 85%);
+        filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.4));
+      "
+    >
+  </div>
+
+  <script>
+    // Countdown lógico para el 31 de Octubre de 2026
+    const birthdayDate = new Date("2026-10-31T00:00:00");
+    const daysElement = document.getElementById("days");
+    const hoursElement = document.getElementById("hours");
+    const minutesElement = document.getElementById("minutes");
+    const secondsElement = document.getElementById("seconds");
+    const orbDaysElement = document.getElementById("orbDays");
+
+    function pad(value) { return String(value).padStart(2, "0"); }
+
+    function updateCountdown() {
+      const now = new Date();
+      const difference = birthdayDate.getTime() - now.getTime();
+
+      if (difference <= 0) {
+        daysElement.textContent = "00";
+        hoursElement.textContent = "00";
+        minutesElement.textContent = "00";
+        secondsElement.textContent = "00";
+        orbDaysElement.textContent = "00d";
+        return;
+      }
+
+      const totalSeconds = Math.floor(difference / 1000);
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      daysElement.textContent = pad(days);
+      hoursElement.textContent = pad(hours);
+      minutesElement.textContent = pad(minutes);
+      secondsElement.textContent = pad(seconds);
+      orbDaysElement.textContent = days + "d";
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // Sistema de Spiders anatómicas y lentas
+    const spiderLayer = document.getElementById("spider-layer");
+    const spiders = [];
+    const SPIDER_COUNT = 6;
+
+    function createSpider() {
+      const spider = document.createElement("div");
+      spider.className = "walking-spider crawling";
+      spider.innerHTML = `
+        <div style="position:relative; width:100%; height:100%;">
+          <div class="spider-body"></div>
+          <div class="spider-head"></div>
+          <span class="spider-leg leg-1"></span>
+          <span class="spider-leg leg-2"></span>
+          <span class="spider-leg leg-3"></span>
+          <span class="spider-leg leg-4"></span>
+          <span class="spider-leg leg-5"></span>
+          <span class="spider-leg leg-6"></span>
+          <span class="spider-leg leg-7"></span>
+          <span class="spider-leg leg-8"></span>
+        </div>
+      `;
+      spiderLayer.appendChild(spider);
+
+      spiders.push({
+        element: spider,
+        x: Math.random() * (window.innerWidth - 70),
+        y: Math.random() * (window.innerHeight - 70),
+        angle: Math.random() * 360,
+        speed: 0.03 + Math.random() * 0.05, // Velocidad reducida para que sean muy lentas
+        changeTimer: 3000 + Math.random() * 6000,
+        webTimer: Math.random() * 600,
+        lastWebX: null,
+        lastWebY: null
+      });
+    }
+
+    for (let i = 0; i < SPIDER_COUNT; i++) { createSpider(); }
+
+    function createWeb(x1, y1, x2, y2) {
+      const web = document.createElement("div");
+      web.className = "spider-web";
+      const dx = x2 - x1, dy = y2 - y1;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+      web.style.left = `${x1}px`;
+      web.style.top = `${y1}px`;
+      web.style.width = `${distance}px`;
+      web.style.transform = `rotate(${angle}deg)`;
+      spiderLayer.appendChild(web);
+
+      setTimeout(() => { web.style.transition = "opacity 6s ease"; web.style.opacity = "0.05"; }, 6000);
+      setTimeout(() => { web.remove(); }, 18000);
+    }
+
+    let previousTime = performance.now();
+    function animateSpiders(currentTime) {
+      const delta = currentTime - previousTime;
+      previousTime = currentTime;
+
+      spiders.forEach((spider) => {
+        const radians = spider.angle * Math.PI / 180;
+        spider.x += Math.cos(radians) * spider.speed * delta;
+        spider.y += Math.sin(radians) * spider.speed * delta;
+
+        if (spider.x < 30) { spider.x = 30; spider.angle = Math.random() * 90 - 45; }
+        if (spider.x > window.innerWidth - 60) { spider.x = window.innerWidth - 60; spider.angle = 135 + Math.random() * 90; }
+        if (spider.y < 30) { spider.y = 30; spider.angle = 30 + Math.random() * 120; }
+        if (spider.y > window.innerHeight - 60) { spider.y = window.innerHeight - 60; spider.angle = 200 + Math.random() * 120; }
+
+        spider.changeTimer -= delta;
+        if (spider.changeTimer <= 0) {
+          spider.angle = Math.random() * 360;
+          spider.changeTimer = 3000 + Math.random() * 6000;
+        }
+
+        spider.element.style.transform = `translate3d(${spider.x}px, ${spider.y}px, 0) rotate(${spider.angle}deg)`;
+
+        spider.webTimer -= delta;
+        if (spider.webTimer <= 0) {
+          const currentX = spider.x + 21;
+          const currentY = spider.y + 21;
+          if (spider.lastWebX !== null) { createWeb(spider.lastWebX, spider.lastWebY, currentX, currentY); }
+          spider.lastWebX = currentX;
+          spider.lastWebY = currentY;
+          spider.webTimer = 500 + Math.random() * 600;
+        }
+      });
+
+      requestAnimationFrame(animateSpiders);
+    }
+
+    requestAnimationFrame(animateSpiders);
+  </script>
+
+</body>
+</html>
